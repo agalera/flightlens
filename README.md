@@ -11,3 +11,11 @@
 
 ## Live demo:
 https://flightlens.firecarrot.com
+
+## Simple architecture
+![simple](https://github.com/kianxineki/flightlens/blob/master/img/simple_architecture.png)
+
+## High availability architecture
+![ha](https://github.com/kianxineki/flightlens/blob/master/img/high_availability_architecture.png)
+
+PD: yes, flightlens is a voluntary typo
