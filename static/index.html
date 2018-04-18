@@ -37,25 +37,10 @@
     </table>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
     <script type="text/javascript">
-
-
         const $table = $('#table');
         const $remove = $('#remove');
         let selections = [];
-
         function initTable() {
             $table.bootstrapTable({
                 height: getHeight(),
@@ -70,61 +55,55 @@
                             sortable: true
                         }, {
                             title: 'Flight Detail',
-                            colspan: 10,
+                            colspan: 9,
                             align: 'center'
                         }
                     ],
                     [
                         {
-                            field: '_id',
-                            title: '_id',
-                            sortable: true,
-                            editable: false,
-                            align: 'center'
-                        }, {
-                            field: 'DATE',
+                            field: 'date',
                             title: 'DATE',
                             sortable: true,
                             editable: false,
                             align: 'center'
                         }, {
-                            field: 'DEP',
+                            field: 'Departure',
                             title: 'DEP',
                             sortable: true,
                             editable: false,
                             align: 'center'
                         }, {
-                            field: 'DEP_TIME',
+                            field: 'Departure time',
                             title: 'DEP_TIME',
                             sortable: true,
                             editable: false,
                             align: 'center'
                         }, {
-                            field: 'DEP_LOCAL_TIME',
+                            field: 'Departure local time',
                             title: 'DEP_LOCAL_TIME',
                             sortable: true,
                             editable: false,
                             align: 'center'
                         }, {
-                            field: 'ARR',
+                            field: 'Arrive',
                             title: 'ARR',
                             sortable: true,
                             editable: false,
                             align: 'center'
                         }, {
-                            field: 'ARR_TIME',
+                            field: 'Arrive time',
                             title: 'ARR_TIME',
                             sortable: true,
                             editable: false,
                             align: 'center'
                         }, {
-                            field: 'ARR_LOCAL_TIME',
+                            field: 'Arrive local time',
                             title: 'ARR_LOCAL_TIME',
                             sortable: true,
                             editable: false,
                             align: 'center'
                         }, {
-                            field: 'BaseIataCode',
+                            field: 'Iata Code',
                             title: 'BaseIataCode',
                             sortable: true,
                             editable: false,
