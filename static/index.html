@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://rawgit.com/wenzhixin/bootstrap-table/develop/src/bootstrap-table.css">
+    <script type="text/javascript" src="https://rawgit.com/wenzhixin/bootstrap-table/develop/src/bootstrap-table.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/wenzhixin/bootstrap-table/develop/src/extensions/export/bootstrap-table-export.js"></script>
+    <script type="text/javascript" src="http://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
+    <title>FlightLens</title>
+</head>
+
+<body>
+    <table id="table"
+       data-toolbar="#toolbar"
+       data-search="true"
+       data-show-refresh="true"
+       data-show-toggle="true"
+       data-show-columns="true"
+       data-show-export="true"
+       data-detail-view="true"
+       data-detail-formatter="detailFormatter"
+       data-minimum-count-columns="2"
+       data-show-pagination-switch="true"
+       data-pagination="true"
+       data-id-field="_id"
+       data-page-list="[10, 25, 50, 100, ALL]"
+       data-side-pagination="server"
+       data-url="http://localhost:4422/flights"
+       data-response-handler="responseHandler">
+    </table>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+    <script type="text/javascript">
+
+
+        const $table = $('#table');
+        const $remove = $('#remove');
+        let selections = [];
+
+        function initTable() {
+            $table.bootstrapTable({
+                height: getHeight(),
+                columns: [
+                    [
+                        {
+                            title: 'Flight ID',
+                            field: '_id',
+                            rowspan: 2,
+                            align: 'center',
+                            valign: 'middle',
+                            sortable: true
+                        }, {
+                            title: 'Flight Detail',
+                            colspan: 10,
+                            align: 'center'
+                        }
+                    ],
+                    [
+                        {
+                            field: '_id',
+                            title: '_id',
+                            sortable: true,
+                            editable: false,
+                            align: 'center'
+                        }, {
+                            field: 'DATE',
+                            title: 'DATE',
+                            sortable: true,
+                            editable: false,
+                            align: 'center'
+                        }, {
+                            field: 'DEP',
+                            title: 'DEP',
+                            sortable: true,
+                            editable: false,
+                            align: 'center'
+                        }, {
+                            field: 'DEP_TIME',
+                            title: 'DEP_TIME',
+                            sortable: true,
+                            editable: false,
+                            align: 'center'
+                        }, {
+                            field: 'DEP_LOCAL_TIME',
+                            title: 'DEP_LOCAL_TIME',
+                            sortable: true,
+                            editable: false,
+                            align: 'center'
+                        }, {
+                            field: 'ARR',
+                            title: 'ARR',
+                            sortable: true,
+                            editable: false,
+                            align: 'center'
+                        }, {
+                            field: 'ARR_TIME',
+                            title: 'ARR_TIME',
+                            sortable: true,
+                            editable: false,
+                            align: 'center'
+                        }, {
+                            field: 'ARR_LOCAL_TIME',
+                            title: 'ARR_LOCAL_TIME',
+                            sortable: true,
+                            editable: false,
+                            align: 'center'
+                        }, {
+                            field: 'BaseIataCode',
+                            title: 'BaseIataCode',
+                            sortable: true,
+                            editable: false,
+                            align: 'center'
+                        }, {
+                            field: 'LOF_ID',
+                            title: 'LOF_ID',
+                            sortable: true,
+                            editable: false,
+                            align: 'center'
+                        },
+                    ]
+                ]
+            });
+            // sometimes footer render error.
+            setTimeout(() => {
+                $table.bootstrapTable('resetView');
+            }, 200);
+            $table.on('check.bs.table uncheck.bs.table ' +
+                'check-all.bs.table uncheck-all.bs.table', () => {
+                    $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+
+                    // save your data, here just save the current page
+                    selections = getIdSelections();
+                    // push or splice the selections if you want to save all data selections
+                });
+            $table.on('expand-row.bs.table', (e, index, row, $detail) => {
+                if (index % 2 == 1) {
+                    $detail.html('Loading from ajax request...');
+                    $.get('LICENSE', res => {
+                        $detail.html(res.replace(/\n/g, '<br>'));
+                    });
+                }
+            });
+            $table.on('all.bs.table', (e, name, args) => {
+                console.log(name, args);
+            });
+            $remove.click(() => {
+                const ids = getIdSelections();
+                $table.bootstrapTable('remove', {
+                    field: 'id',
+                    values: ids
+                });
+                $remove.prop('disabled', true);
+            });
+            $(window).resize(() => {
+                $table.bootstrapTable('resetView', {
+                    height: getHeight()
+                });
+            });
+        }
+
+
+
+        function getIdSelections() {
+            return $.map($table.bootstrapTable('getSelections'), ({ id }) => id);
+        }
+
+        function responseHandler(res) {
+            $.each(res.rows, (i, row) => {
+                row.state = $.inArray(row.id, selections) !== -1;
+            });
+            return res;
+        }
+
+        function detailFormatter(index, row) {
+            const html = [];
+            $.each(row, (key, value) => {
+                html.push(`<p><b>${key}:</b> ${value}</p>`);
+            });
+            return html.join('');
+        }
+
+        function operateFormatter(value, row, index) {
+            return [
+                '<a class="like" href="javascript:void(0)" title="Like">',
+                '<i class="fa fa-heart"></i>',
+                '</a>  ',
+                '<a class="remove" href="javascript:void(0)" title="Remove">',
+                '<i class="fa fa-remove"></i>',
+                '</a>'
+            ].join('');
+        }
+
+        window.operateEvents = {
+            'click .like': function (e, value, row, index) {
+                alert(`You click like action, row: ${JSON.stringify(row)}`);
+            },
+            'click .remove': function (e, value, { id }, index) {
+                $table.bootstrapTable('remove', {
+                    field: 'id',
+                    values: [id]
+                });
+            }
+        };
+
+        function totalPriceFormatter(data) {
+            let total = 0;
+            $.each(data, (i, { price }) => {
+                total += +(price.substring(1));
+            });
+            return `$${total}`;
+        }
+
+        function getHeight() {
+            return $(window).height() - $('h1').outerHeight(true);
+        }
+
+        $(() => {
+            initTable();
+        })
+
+    </script>
+
+
+</body>
+
+</html>
