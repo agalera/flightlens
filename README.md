@@ -9,5 +9,5 @@
 - ./start.sh
 - join http://localhost:4422
 
-Live demo:
-TODO
+## Live demo:
+https://flightlens.firecarrot.com
