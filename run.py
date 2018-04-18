@@ -13,7 +13,7 @@ from bottle import (
 from openpyxl import load_workbook
 from pymongo import MongoClient
 
-db = MongoClient(connect=False)['flightlens']
+db = MongoClient(host="mongo", connect=False)['flightlens']
 
 labels = [
     "_id", "DATE", "DEP", "DEP_TIME", "DEP_LOCAL_TIME", "ARR", "ARR_TIME",
@@ -108,7 +108,7 @@ class JSONEncoder(json.JSONEncoder):
 
 
 if __name__ == "__main__":
-    if not MongoClient()['flightlens'].flight.count():
+    if not MongoClient(host="mongo")['flightlens'].flight.count():
         load_excel('FlightLegs-2017-07-24.xlsx')
     # install plugins
     install(JSONPlugin(json_dumps=JSONEncoder().encode))

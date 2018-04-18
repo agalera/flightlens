@@ -1,0 +1,1 @@
+docker run --net devnet --name mongo -d mongo
