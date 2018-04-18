@@ -1,5 +1,5 @@
 import json
-from functools import lru_cache
+from multiprocessing import cpu_count
 
 from bottle_errorsrest import ErrorsRestPlugin
 from bottle import (
@@ -13,7 +13,7 @@ from bottle import (
 from openpyxl import load_workbook
 from pymongo import MongoClient
 
-db = MongoClient()['flightlens']
+db = MongoClient(connect=False)['flightlens']
 
 labels = [
     "_id", "DATE", "DEP", "DEP_TIME", "DEP_LOCAL_TIME", "ARR", "ARR_TIME",
@@ -56,9 +56,7 @@ def flights():
             return int(value)
 
         raise HTTPError('invalid number')
-    @lru_cache(maxsize=1024)
-    def memory_cache(qry):
-        return
+
     sort = request.query.get("sort", "_id")
     limit = secure_int(request.query.get("limit", 10))
     offset = secure_int(request.query.get("offset", 0))
@@ -91,7 +89,6 @@ def flights():
     return {
         'total': qry.count(),
         'rows': list(qry)}
-    return memory_cache(qry)
 
 
 @get('/flights/<flight_id:int>')
@@ -111,9 +108,16 @@ class JSONEncoder(json.JSONEncoder):
 
 
 if __name__ == "__main__":
-    if not db.flight.count():
+    if not MongoClient()['flightlens'].flight.count():
         load_excel('FlightLegs-2017-07-24.xlsx')
     # install plugins
     install(JSONPlugin(json_dumps=JSONEncoder().encode))
     install(ErrorsRestPlugin())
-    run(port=4422, host="0.0.0.0")
+    run(port=4422,
+        host="0.0.0.0",
+        server="gunicorn",
+        workers=2 * cpu_count() + 1,
+        worker_class="egg:meinheld#gunicorn_worker",
+        quiet=True,
+        debug=False,
+        timeout=600)

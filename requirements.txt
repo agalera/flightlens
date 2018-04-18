@@ -1,3 +1,6 @@
 openpyxl==2.5.2
-ErrorsRestPlugin
+bottle_errorsrest
 bottle
+pymongo
+gunicorn
+meinheld
