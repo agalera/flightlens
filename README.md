@@ -18,4 +18,6 @@ https://flightlens.firecarrot.com
 ## High availability architecture
 ![ha](https://github.com/kianxineki/flightlens/blob/master/img/high_availability_architecture.png)
 
-PD: yes, flightlens is a voluntary typo
+## Other things
+
+in the live demo I'm using caddy, is responsible for adding https and gzip support (4.3mb vs 358kb when requesting all flights)
