@@ -20,4 +20,4 @@ https://flightlens.firecarrot.com
 
 ## Other things
 
-in the live demo I'm using caddy, is responsible for adding https and gzip support (4.3mb vs 358kb when requesting all flights)
+in the live demo I'm using caddy, is responsible for adding https/2.0 and gzip support (4.3mb vs 358kb when requesting all flights)
