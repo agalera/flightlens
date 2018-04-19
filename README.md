@@ -1,7 +1,7 @@
 # flightlens
 
 ## Start project
-- git clone https://github.com/kianxineki/flightlens.git
+- git clone https://github.com/agalera/flightlens.git
 - cd flightlens
 - ./config_network.sh
 - ./build.sh
@@ -13,10 +13,10 @@
 https://flightlens.firecarrot.com
 
 ## Simple architecture
-![simple](https://github.com/kianxineki/flightlens/blob/master/img/simple_architecture.png)
+![simple](https://github.com/agalera/flightlens/blob/master/img/simple_architecture.png)
 
 ## High availability architecture
-![ha](https://github.com/kianxineki/flightlens/blob/master/img/high_availability_architecture.png)
+![ha](https://github.com/agalera/flightlens/blob/master/img/high_availability_architecture.png)
 
 ## Other things
 
